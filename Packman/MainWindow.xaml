@@ -12,7 +12,7 @@
         PreviewKeyDown="Window_PreviewKeyDown">
     <Border BorderBrush="Gray" BorderThickness="10">
         <StackPanel Orientation="Horizontal">
-            <Canvas Name="GameArea" ClipToBounds="True" Width="400" Height="400" Background="DarkGray" />
+            <Canvas Name="GameArea" ClipToBounds="True" Background="DarkGray" />
             <Border BorderBrush="Gray" Background="DarkGray" Width="125" BorderThickness="5 0 0 0">
                 <StackPanel VerticalAlignment="Stretch">
                     <Label Content="PackMan" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
@@ -33,9 +33,9 @@
                         <Label Grid.Row="2" Grid.Column="0" Name="static3" Content="Ticks:" />
                         <Label Grid.Row="2" Grid.Column="1" Name="Tick_Display" Content="0" />
                     </Grid>
-                    <Button x:Name="Reset_Button" Margin="0 5 1 0" Content="Reset" FontSize="18" />
-                    <Button x:Name="Settings_Button" Margin="0 5 1 0" Content="Settings" FontSize="18" />
-                    <Button x:Name="Play_Button" Margin="0 5 1 0" Content="Play" FontSize="20" Background="Green" />
+                    <Button x:Name="Start_Button" Click="Start_Button_Click" Margin="1 5 1 0" HorizontalAlignment="Stretch" Content="Play" FontSize="20" Background="Green" />
+                    <Button x:Name="Reset_Button" Click="Reset_Button_Click" Margin="1 5 1 0" HorizontalAlignment="Stretch" Content="Reset" FontSize="18" />
+                    <Button x:Name="Settings_Button" Click="Settings_Button_Click" Margin="1 5 1 0" HorizontalAlignment="Stretch" Content="Settings" FontSize="18" />
                 </StackPanel>
             </Border>
         </StackPanel>

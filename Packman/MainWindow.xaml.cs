@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,49 +19,70 @@ namespace Packman
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    public struct Vector
+    {
+        Vector(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+        int x;
+        int y;
+    }
+    public enum Direction
+    {
+        up,
+        down,
+        left,
+        right,
+    }
     public partial class MainWindow : Window
     {
-        const int SnakeSquareSize = 20;
+        const float board_scale = 0.1f;
+        private Timer frame, tick;
+        private bool game_state = false;
+        private Player packman;
+        private BitmapImage bitmap;
         public MainWindow()
         {
             InitializeComponent();
+            frame = new Timer(10);
+            frame.Elapsed += Frame_Elapsed;
+            tick = new Timer(1000);
+            tick.Elapsed += Tick_Elapsed;
+            bitmap = new BitmapImage(new Uri(@"C:\Users\Nathan\source\repos\Packman\Packman\Resources\Game_Board.bmp"));
+            GameArea.Width = bitmap.Width * board_scale;
+            GameArea.Height = bitmap.Height * board_scale;
+            packman = new Player();
         }
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             DrawGameArea();
         }
-        private void DrawGameArea()
+        private void Start_Button_Click(object sender, RoutedEventArgs e)
         {
-            bool doneDrawingBackground = false;
-            int nextX = 0, nextY = 0;
-            int rowCounter = 0;
-            bool nextIsOdd = false;
-
-            while (doneDrawingBackground == false)
+            if (game_state) Stop_Game();
+            else
             {
-                Rectangle rect = new Rectangle
-                {
-                    Width = SnakeSquareSize,
-                    Height = SnakeSquareSize,
-                    Fill = nextIsOdd ? Brushes.White : Brushes.Black
-                };
-                GameArea.Children.Add(rect);
-                Canvas.SetTop(rect, nextY);
-                Canvas.SetLeft(rect, nextX);
-
-                nextIsOdd = !nextIsOdd;
-                nextX += SnakeSquareSize;
-                if (nextX >= GameArea.ActualWidth)
-                {
-                    nextX = 0;
-                    nextY += SnakeSquareSize;
-                    rowCounter++;
-                    nextIsOdd = (rowCounter % 2 != 0);
-                }
-
-                if (nextY >= GameArea.ActualHeight)
-                    doneDrawingBackground = true;
+                Start_Game();
             }
+        }
+        private void Reset_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Stop_Game();
+            Reset_Game();
+        }
+        private void Settings_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void Tick_Elapsed(object sender, ElapsedEventArgs e)
+        {
+
+        }
+        private void Frame_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            DrawGameArea();
         }
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -70,6 +92,33 @@ namespace Packman
             {
                 e.Handled = true;
             }
+        }
+        private void Start_Game()
+        {
+            game_state = true;
+            frame.Start();
+            tick.Start();
+        }
+        private void Stop_Game()
+        {
+            game_state = false;
+            frame.Stop();
+            tick.Stop();
+        }
+        private void Reset_Game()
+        {
+
+        }
+        private void DrawGameArea()
+        {
+            GameArea.Children.Clear();
+            Image image = new Image();
+            image.Stretch = Stretch.Uniform;
+            image.StretchDirection = StretchDirection.Both;
+            image.Width = GameArea.Width;
+            image.Height = GameArea.Height;
+            image.Source = bitmap;
+            GameArea.Children.Add(image);
         }
     }
 }
